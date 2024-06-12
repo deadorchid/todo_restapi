@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -71,6 +72,20 @@ func NewRouter() *gin.Engine {
 		}
 
 		c.JSON(http.StatusFound, todos[id])
+	})
+
+	r.POST("/todo", func(c *gin.Context) {
+		var requestBody Todo
+		if err := c.BindJSON(&requestBody); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": "bad request",
+			})
+			return
+		}
+		todos = append(todos, requestBody)
+		c.JSON(http.StatusCreated, gin.H{
+			"message": fmt.Sprintf("todo created with id: %d", len(todos)-1),
+		})
 	})
 
 	return r
