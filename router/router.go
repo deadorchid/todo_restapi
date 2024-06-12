@@ -88,5 +88,30 @@ func NewRouter() *gin.Engine {
 		})
 	})
 
+	r.DELETE("/todo/:id", func(c *gin.Context) {
+		strId := c.Param("id")
+
+		id, err := strconv.Atoi(strId)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "failed to convert id",
+			})
+			return
+		}
+
+		if id > len(todos)-1 || id < 0 {
+			c.JSON(http.StatusNotFound, gin.H{
+				"message": "failed to found given id",
+			})
+			return
+		}
+
+		todos = append(todos[:id], todos[id+1:]...)
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "todo deleted",
+		})
+	})
+
 	return r
 }
