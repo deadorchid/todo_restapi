@@ -3,45 +3,35 @@ package router
 import (
 	"fmt"
 	"net/http"
+	"simple-rest/types"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Person struct {
-	Name     string `json:"name"`
-	LastName string `json:"last_name"`
-}
-
-type Todo struct {
-	Title  string `json:"title"`
-	Status int    `json:"status"`
-	Author Person `json:"author"`
-}
-
-var todos []Todo = []Todo{
+var todos []types.Todo = []types.Todo{
 	{
-		"Приготовить обэд",
-		0,
-		Person{
-			"Daniil",
-			"Mikhaylov",
+		Title:  "Приготовить обэд",
+		Status: 0,
+		Author: types.Person{
+			Name:     "Daniil",
+			LastName: "Mikhaylov",
 		},
 	},
 	{
-		"Приготовить завтрак",
-		0,
-		Person{
-			"Daniil",
-			"Mikhaylov",
+		Title:  "Приготовить завтрак",
+		Status: 0,
+		Author: types.Person{
+			Name:     "Daniil",
+			LastName: "Mikhaylov",
 		},
 	},
 	{
-		"Поспать",
-		1,
-		Person{
-			"Daniil",
-			"Mikhaylov",
+		Title:  "Поспать",
+		Status: 1,
+		Author: types.Person{
+			Name:     "Daniil",
+			LastName: "Mikhaylov",
 		},
 	},
 }
@@ -75,7 +65,7 @@ func NewRouter() *gin.Engine {
 	})
 
 	r.POST("/todo", func(c *gin.Context) {
-		var requestBody Todo
+		var requestBody types.Todo
 		if err := c.BindJSON(&requestBody); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"message": "bad request",
@@ -131,7 +121,7 @@ func NewRouter() *gin.Engine {
 			return
 		}
 
-		var requestBody Todo
+		var requestBody types.Todo
 
 		if err := c.BindJSON(&requestBody); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
