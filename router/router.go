@@ -1,8 +1,8 @@
 package router
 
 import (
-	"log"
 	"simple-rest/types"
+	"simple-rest/utils/logger"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,7 +34,7 @@ var todos []types.Todo = []types.Todo{
 	},
 }
 
-func NewRouter(logger *log.Logger) *gin.Engine {
+func NewRouter(logger *logger.Logger) *gin.Engine {
 	r := gin.Default()
 
 	todoRouter := NewTodoRouter(logger)

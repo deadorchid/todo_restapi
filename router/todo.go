@@ -2,19 +2,19 @@ package router
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"simple-rest/types"
+	"simple-rest/utils/logger"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type TodoRouter struct {
-	logger *log.Logger
+	logger *logger.Logger
 }
 
-func NewTodoRouter(logger *log.Logger) *TodoRouter {
+func NewTodoRouter(logger *logger.Logger) *TodoRouter {
 	return &TodoRouter{
 		logger: logger,
 	}
@@ -57,7 +57,7 @@ func (r *TodoRouter) createTodo(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"message": fmt.Sprintf("todo created with id: %d", len(todos)-1),
 	})
-	log.Println("new todo created")
+	r.logger.PrintInfo("new todo created")
 }
 
 func (r *TodoRouter) deleteTodo(c *gin.Context) {
@@ -83,7 +83,7 @@ func (r *TodoRouter) deleteTodo(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "todo deleted",
 	})
-	log.Println("todo deleted")
+	r.logger.PrintInfo("todo deleted")
 }
 
 func (r *TodoRouter) updateTodo(c *gin.Context) {
@@ -117,5 +117,5 @@ func (r *TodoRouter) updateTodo(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"message": fmt.Sprintf("todo with id: %d changed", id),
 	})
-	log.Println("todo updated")
+	r.logger.PrintInfo("todo updated")
 }

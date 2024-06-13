@@ -4,19 +4,21 @@ import (
 	"log"
 	"os"
 	"simple-rest/router"
+	"simple-rest/utils/logger"
 )
 
 func main() {
-	r := router.NewRouter(log.Default())
+	logger := logger.NewLogger(log.Default())
+	r := router.NewRouter(logger)
 
 	file, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
-		log.Fatal(err)
+		logger.PrintError(err)
 	}
 
 	log.SetOutput(file)
 
 	if err := r.Run(); err != nil {
-		log.Fatal(err)
+		logger.PrintError(err)
 	}
 }
