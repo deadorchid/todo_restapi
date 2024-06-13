@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"simple-rest/types"
 	"strconv"
@@ -9,11 +10,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func todosRouter(c *gin.Context) {
+type TodoRouter struct {
+	logger *log.Logger
+}
+
+func NewTodoRouter(logger *log.Logger) *TodoRouter {
+	return &TodoRouter{
+		logger: logger,
+	}
+}
+
+func (r *TodoRouter) getTodos(c *gin.Context) {
 	c.JSON(http.StatusOK, todos)
 }
 
-func todoIdRouter(c *gin.Context) {
+func (r *TodoRouter) todoId(c *gin.Context) {
 	strId := c.Param("id")
 
 	id, err := strconv.Atoi(strId)
@@ -34,7 +45,7 @@ func todoIdRouter(c *gin.Context) {
 	c.JSON(http.StatusFound, todos[id])
 }
 
-func createTodoRouter(c *gin.Context) {
+func (r *TodoRouter) createTodo(c *gin.Context) {
 	var requestBody types.Todo
 	if err := c.BindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -46,9 +57,10 @@ func createTodoRouter(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"message": fmt.Sprintf("todo created with id: %d", len(todos)-1),
 	})
+	log.Println("new todo created")
 }
 
-func deleteTodoRouter(c *gin.Context) {
+func (r *TodoRouter) deleteTodo(c *gin.Context) {
 	strId := c.Param("id")
 
 	id, err := strconv.Atoi(strId)
@@ -71,9 +83,10 @@ func deleteTodoRouter(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "todo deleted",
 	})
+	log.Println("todo deleted")
 }
 
-func updateTodoRouter(c *gin.Context) {
+func (r *TodoRouter) updateTodo(c *gin.Context) {
 	strId := c.Param("id")
 
 	id, err := strconv.Atoi(strId)
@@ -104,4 +117,5 @@ func updateTodoRouter(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"message": fmt.Sprintf("todo with id: %d changed", id),
 	})
+	log.Println("todo updated")
 }

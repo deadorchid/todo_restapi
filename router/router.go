@@ -1,6 +1,7 @@
 package router
 
 import (
+	"log"
 	"simple-rest/types"
 
 	"github.com/gin-gonic/gin"
@@ -33,14 +34,16 @@ var todos []types.Todo = []types.Todo{
 	},
 }
 
-func NewRouter() *gin.Engine {
+func NewRouter(logger *log.Logger) *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/todo", todosRouter)
-	r.GET("/todo/:id", todoIdRouter)
-	r.POST("/todo", createTodoRouter)
-	r.DELETE("/todo/:id", deleteTodoRouter)
-	r.PUT("/todo/:id", updateTodoRouter)
+	todoRouter := NewTodoRouter(logger)
+
+	r.GET("/todo", todoRouter.getTodos)
+	r.GET("/todo/:id", todoRouter.todoId)
+	r.POST("/todo", todoRouter.createTodo)
+	r.DELETE("/todo/:id", todoRouter.deleteTodo)
+	r.PUT("/todo/:id", todoRouter.updateTodo)
 
 	return r
 }
