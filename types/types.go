@@ -1,5 +1,13 @@
 package types
 
+type User struct {
+	Id       int    `json:"id"`
+	Name     string `json:"name"`
+	LastName string `json:"last_name"`
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+
 type Person struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`

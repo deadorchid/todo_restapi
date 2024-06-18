@@ -11,6 +11,7 @@ func NewRouter(logger *logger.Logger, db *sql.DB) *gin.Engine {
 	r := gin.Default()
 
 	todoRouter := NewTodoRouter(logger, db)
+	authRouter := NewAuthRouter(logger, db)
 
 	r.GET("/todo", todoRouter.getTodos)
 	r.POST("/todo", todoRouter.createTodo)
@@ -18,5 +19,7 @@ func NewRouter(logger *logger.Logger, db *sql.DB) *gin.Engine {
 	r.DELETE("/todo/:id", todoRouter.deleteTodo)
 	r.PUT("/todo/:id", todoRouter.updateTodo)
 
+	r.POST("/register", authRouter.register)
+	r.POST("/login", authRouter.login)
 	return r
 }
